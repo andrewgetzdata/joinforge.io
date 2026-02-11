@@ -19,7 +19,7 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 function App() {
   return (
     <QueryClientProvider client={queryClientInstance}>
-      <Router>
+      <Router basename="/joinforge">
         <Routes>
           <Route path="/" element={
             <LayoutWrapper currentPageName={mainPageKey}>
