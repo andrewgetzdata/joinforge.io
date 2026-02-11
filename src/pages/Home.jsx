@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Briefcase, Sparkles, Calendar, Zap, Target, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import HeroAmbient from "../components/home/HeroAmbient";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { usePartners } from "@/hooks/useLocalData";
 
 export default function Home() {
   const [typedText, setTypedText] = useState("");
@@ -29,11 +28,7 @@ export default function Home() {
     return () => clearInterval(typingInterval);
   }, []);
 
-  const { data: partners, isLoading: partnersLoading } = useQuery({
-    queryKey: ["partners"],
-    queryFn: () => base44.entities.Partner.list("display_order"),
-    initialData: [],
-  });
+  const { data: partners, isLoading: partnersLoading } = usePartners();
 
   const features = [
     {
@@ -194,14 +189,14 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      {partners.filter(p => p.is_archived !== false).length > 0 && (
+      {partners.length > 0 && (
         <section className="py-16 border-t border-white/5" style={{ background: '#0f1011' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">
               Our Partners
             </h2>
             <div className="flex flex-wrap justify-center items-center gap-16">
-              {partners.filter(p => p.is_archived !== false).map((partner) => {
+              {partners.map((partner) => {
                 const heightClasses = {
                   small: "h-30 md:h-32",
                   medium: "h-36 md:h-40", 
@@ -211,7 +206,7 @@ export default function Home() {
                 
                 return (
                   <motion.div
-                    key={partner.id}
+                    key={partner.name}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4 }}
