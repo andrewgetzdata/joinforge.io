@@ -1,35 +1,23 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Briefcase, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 import JobCard from "../components/jobs/JobCard";
 import JobDialog from "../components/jobs/JobDialog";
+import { useJobs } from "@/hooks/useLocalData";
 
 export default function Jobs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedJob, setSelectedJob] = useState(null);
 
-  const { data: jobs, isLoading } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: () => base44.entities.Job.list("-created_date"),
-    initialData: [],
-  });
+  const { data: jobs, isLoading } = useJobs(searchTerm, selectedType);
 
   const jobTypes = ["All", "Full-time", "Part-time", "Contract", "Internship"];
 
-  const filteredJobs = jobs.filter((job) => {
-    const matchesSearch =
-      job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.tags?.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesType = selectedType === "All" || job.job_type === selectedType;
-    const isVisible = job.is_archived !== false;
-    return matchesSearch && matchesType && isVisible;
-  });
+  // Jobs are already filtered by the useJobs hook
+  const filteredJobs = jobs;
 
   return (
     <div className="min-h-screen" style={{ background: '#0f1011' }}>

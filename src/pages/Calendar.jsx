@@ -1,22 +1,17 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Calendar as CalendarIcon, Clock, MapPin, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 import EventDialog from "../components/events/EventDialog";
+import { useAllEvents } from "@/hooks/useLocalData";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const { data: events, isLoading } = useQuery({
-    queryKey: ["events"],
-    queryFn: () => base44.entities.Event.list("-date"),
-    initialData: [],
-  });
+  const { data: events, isLoading } = useAllEvents();
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -25,8 +20,7 @@ export default function Calendar() {
   const getEventsForDay = (day) => {
     return events.filter((event) => {
       const eventDate = parseISO(event.date);
-      const isVisible = event.is_past !== false;
-      return isSameDay(eventDate, day) && isVisible;
+      return isSameDay(eventDate, day);
     });
   };
 
@@ -39,7 +33,7 @@ export default function Calendar() {
   };
 
   const upcomingEvents = events
-    .filter((event) => new Date(event.date) >= new Date() && event.is_past !== false)
+    .filter((event) => new Date(event.date) >= new Date())
     .slice(0, 5);
 
   return (
@@ -165,7 +159,7 @@ export default function Calendar() {
                           const colors = eventTypeColors[event.type];
                           return (
                             <button
-                              key={event.id}
+                              key={event.title}
                               onClick={() => setSelectedEvent(event)}
                               className="w-full text-left px-2 py-1 text-xs rounded border hover:opacity-80 transition-opacity truncate"
                               style={{
@@ -233,7 +227,7 @@ export default function Calendar() {
                     const colors = eventTypeColors[event.type];
                     return (
                       <button
-                        key={event.id}
+                        key={event.title}
                         onClick={() => setSelectedEvent(event)}
                         className="w-full text-left p-3 rounded-lg border hover:bg-white/5 transition-colors"
                         style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +6,7 @@ import { Search, Sparkles, Zap, Target, Users, Handshake } from "lucide-react";
 import { motion } from "framer-motion";
 import EventCard from "../components/events/EventCard";
 import EventDialog from "../components/events/EventDialog";
+import { useEvents } from "@/hooks/useLocalData";
 
 export default function Events() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,21 +22,10 @@ export default function Events() {
     }
   }, []);
 
-  const { data: events, isLoading } = useQuery({
-    queryKey: ["events"],
-    queryFn: () => base44.entities.Event.list("-date"),
-    initialData: [],
-  });
+  const { data: events, isLoading } = useEvents(searchTerm, selectedType);
 
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch =
-      event.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.tags?.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesType = selectedType === "All" || event.type === selectedType;
-    const isVisible = event.is_past !== false;
-    return matchesSearch && matchesType && isVisible;
-  });
+  // Events are already filtered by the useEvents hook
+  const filteredEvents = events;
 
   const typeIcons = {
     "Lightning Session": Zap,
