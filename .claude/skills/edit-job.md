@@ -25,16 +25,29 @@ Help manage job listings in /src/data/jobs.json
 - is_archived: boolean, false to display
 - created_date: ISO datetime string
 
-## When adding jobs:
+## Process
 1. Read current jobs.json file
-2. Parse provided job information
+2. Parse and validate provided job information
 3. Create proper JSON structure with validation
 4. Ensure markdown formatting in description/requirements
-5. Set created_date to current date
-6. Add to array and write updated file
-7. Suggest running `npm run build` to test
+5. Set created_date to current ISO datetime for new jobs
+6. Validate all required fields and data types
+7. Write updated file
+8. Show summary of changes made
+9. Test with `npm run build` to ensure JSON is valid
+10. Suggest using `/git-workflow` skill for committing changes
 
-## Example Job Structure:
+## Validation Rules
+- All required fields must be present
+- job_type must be one of the valid options
+- location must be array of strings
+- tags must be array of strings
+- salary_range should follow format "$X,XXX - $Y,YYY"
+- URLs must be valid format
+- created_date must be ISO 8601 format
+- Boolean fields must be true/false
+
+## Example Job Structure
 ```json
 {
   "title": "Data Scientist",
