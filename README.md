@@ -6,7 +6,7 @@ Forge is Ohio's largest community of data and AI builders. We bring together eng
 
 ## The Story
 
-Forge started as the **Ohio AI Collective** — a grassroots effort to connect the state's growing community of AI and data professionals. As the community grew beyond meetups into ship sessions, lightning talks, a job board, and open-source initiatives, we rebranded to **Forge** to better reflect what we're building: a place where ideas, skills, and careers are forged together.
+Forge started as the **Columbus Data Collectivee** — a grassroots effort to connect the state's growing community of AI and data professionals. As the community grew beyond meetups into ship sessions, lightning talks, a job board, and open-source initiatives, we rebranded to **Forge** to better reflect what we're building: a place where ideas, skills, and careers are forged together.
 
 The name captures our ethos — hands-on, builder-first, community-driven.
 
